@@ -20,26 +20,27 @@ jobs:
         uses: actions/setup-python@v5
         with:
           python-version: '3.11'
-- name: Generate manifest.json and .nojekyll
-  run: |
-    cat > manifest.json << 'EOF'
-    {
-      "name": "CYD Crypto Price Display",
-      "version": "1.0.0",
-      "new_install_prompt_erase": true,
-      "builds": [
-        {
-          "chipFamily": "ESP32",
-          "parts": [
-            { "path": "bootloader.bin", "offset": 4096 },
-            { "path": "partitions.bin", "offset": 32768 },
-            { "path": "cyd-crypto-ticker_firmware.bin", "offset": 65536 }
-          ]
-        }
-      ]
-    }
-    EOF
-    touch .nojekyll
+
+      - name: Generate manifest.json and .nojekyll
+        run: |
+          cat > manifest.json << 'EOF'
+          {
+            "name": "CYD Crypto Price Display",
+            "version": "1.0.0",
+            "new_install_prompt_erase": true,
+            "builds": [
+              {
+                "chipFamily": "ESP32",
+                "parts": [
+                  { "path": "bootloader.bin", "offset": 4096 },
+                  { "path": "partitions.bin", "offset": 32768 },
+                  { "path": "cyd-crypto-ticker_firmware.bin", "offset": 65536 }
+                ]
+              }
+            ]
+          }
+          EOF
+          touch .nojekyll
 
       - name: Upload Pages artifact
         uses: actions/upload-pages-artifact@v3
