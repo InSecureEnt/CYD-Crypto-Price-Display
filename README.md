@@ -6,7 +6,7 @@
 **Hardware:** ESP32-2432S028 (CYD) — 320×240 ST7789 + XPT2046 touch
 
 **Firmware location:** 
-- `cyd-crypto-ticker_firmware.bin` — main firmware
+- `cyd-crypto-ticker_firmware.bin` — main firmware - 0x10000
 - `bootloader.bin` — 0x1000
 - `partitions.bin` — 0x8000
 
