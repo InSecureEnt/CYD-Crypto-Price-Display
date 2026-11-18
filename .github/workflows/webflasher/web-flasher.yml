@@ -1,0 +1,57 @@
+name: Build & Deploy Web Flasher
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Create manifest.json
+        run: |
+          cat > manifest.json << 'EOF'
+          {
+            "name": "CYD Crypto Price Display",
+            "version": "1.0.0",
+            "new_install_prompt_erase": true,
+            "builds": [
+              {
+                "chipFamily": "ESP32",
+                "parts": [
+                  { "path": "bootloader.bin", "offset": 4096 },
+                  { "path": "partitions.bin", "offset": 32768 },
+                  { "path": "cyd-crypto-ticker_firmware.bin", "offset": 65536 }
+                ]
+              }
+            ]
+          }
+          EOF
+
+      - name: Copy web flasher page
+        run: cp web-flasher.html index.html
+
+      - name: Upload Pages artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: .
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
